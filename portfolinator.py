@@ -26,9 +26,9 @@ for repo in gh.iter_user_repos(username):
     print '\tWatchers: %s' % repo.watchers
     print '\tStargazers: %s' % len(list(repo.iter_stargazers()))
     print '\tForks: %s' % repo.forks
-    print '\tTotal issues: %s' % len(list(repo.iter_issues()))
+    print '\tTotal issues: %s' % (len(list(repo.iter_issues(state='closed')))
+                                  + repo.open_issues)
     print '\tOpen issues: %s' % repo.open_issues
-    # iter_pulls
     print '\tTags: %s' % len(list(repo.iter_tags()))
     for contribution in repo.iter_contributor_statistics():
         if username.lower() == contribution.author.login.lower():
