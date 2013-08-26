@@ -1,6 +1,6 @@
-$(document).ready(function() {
+function portfolinatorinize(username) {
     $.ajax({
-        url: 'http://ani.pe/portfolinator/user/mutantfreak',
+        url: 'http://ani.pe/portfolinator/user/'+username,
         type: 'GET',
         dataType: 'jsonp',
         success: function(json) {
@@ -39,5 +39,5 @@ $(document).ready(function() {
             );
         },
     });
-});
+}
 
