@@ -1,8 +1,14 @@
 function portfolinatorinize(username) {
     $.ajax({
         url: 'http://ani.pe/portfolinator/user/'+username,
-        type: 'GET',
         dataType: 'jsonp',
+        // For testing the frontend, you can request the example static json
+        // reponse.  This is how you'd do it if hosting locally on port 8000,
+        // as with `python -m SimpleHTTPServer`.
+        //url: 'http://localhost:8000/example.json',
+        //dataType: 'json',
+        
+        type: 'GET',
         success: function(json) {
             console.log(json);
             var repos = $('<div>').addClass('portfolinator-repos');
