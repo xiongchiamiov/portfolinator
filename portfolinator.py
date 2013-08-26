@@ -7,6 +7,7 @@
 from flask import Flask
 from flask.ext.jsonpify import jsonify
 from github3 import login
+from github3.models import GitHubError
 
 import settings
 
@@ -34,9 +35,14 @@ def user(username):
         r['numWatchers'] = repo.watchers
         r['numStargazers'] = len(list(repo.iter_stargazers()))
         r['numForks'] = repo.forks
-        r['numTotalIssues'] = (len(list(repo.iter_issues(state='closed')))
-                               + repo.open_issues)
-        r['numOpenIssues'] = repo.open_issues
+        try:
+            r['numTotalIssues'] = (len(list(repo.iter_issues(state='closed')))
+                                   + repo.open_issues)
+            r['numOpenIssues'] = repo.open_issues
+        except GitHubError:
+            # Issues are disabled, probably.
+            r['numTotalIssues'] = 0
+            r['numOpenIssues'] = 0
         r['numTags'] = len(list(repo.iter_tags()))
         for contribution in repo.iter_contributor_statistics():
             if username.lower() == contribution.author.login.lower():
