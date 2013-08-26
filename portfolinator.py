@@ -4,7 +4,7 @@
 # May you share freely, never taking more than you give.
 # May you find love and love everyone you find.
 
-from flask import Flask, render_template
+from flask import Flask, json
 from github3 import login
 
 import settings
@@ -42,7 +42,7 @@ def user(username):
                 r['numContributedCommits'] = contribution.total
                 break
         repos.append(r)
-    return render_template('user.html', username=username, repos=repos)
+    return json.jsonify(username=username, repos=repos)
 
 if __name__ == '__main__':
     app.run(debug=settings.debug)
