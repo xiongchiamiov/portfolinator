@@ -33,7 +33,7 @@ function portfolinatorinize(username) {
                 );
                 repos.append(div);
             });
-            $('#portfolinator').append(
+            $('#portfolinator').empty().append(
                 $('<h1>').text(json.username),
                 repos
             );
