@@ -1,4 +1,4 @@
-function portfolinatorinize(username) {
+function portfolinatorinize(username, extraRepos) {
     $.ajax({
         url: 'http://ani.pe/portfolinator/user/'+username,
         dataType: 'jsonp',
@@ -9,6 +9,7 @@ function portfolinatorinize(username) {
         //dataType: 'json',
         
         type: 'GET',
+        data: {'extraRepos': extraRepos},
         success: function(json) {
             console.log(json);
             var repos = $('<div>').addClass('portfolinator-repos');

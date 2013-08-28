@@ -4,7 +4,7 @@
 # May you share freely, never taking more than you give.
 # May you find love and love everyone you find.
 
-from flask import Flask
+from flask import Flask, request
 from flask.ext.jsonpify import jsonify
 from github3 import login
 from github3.models import GitHubError
@@ -20,8 +20,7 @@ gh = login(token=settings.token)
 
 @app.route('/user/<username>')
 def user(username):
-    repos = []
-    for repo in gh.iter_user_repos(username):
+    def extract_repo(repo):
         r = {}
         r['name'] = repo.full_name
         r['description'] = repo.description
@@ -48,7 +47,18 @@ def user(username):
             if username.lower() == contribution.author.login.lower():
                 r['numContributedCommits'] = contribution.total
                 break
-        repos.append(r)
+        return r
+
+    repos = []
+    for repo in gh.iter_user_repos(username):
+        repos.append(extract_repo(repo))
+    for fullName in request.args.getlist('extraRepos[]'):
+        # We pass in a single list of to-be-split names instead of a list of
+        # tuples because that's *way* easier when it comes to URL parsing.  And
+        # Github doesn't allow slashes in either usernames or reponames, so
+        # we're pretty safe.
+        username, repo = fullName.split('/')
+        repos.append(extract_repo(gh.repository(username, repo)))
     return jsonify(username=username, repos=repos)
 
 if __name__ == '__main__':
