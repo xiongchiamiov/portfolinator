@@ -1,17 +1,38 @@
 function portfolinatorinize(username, extraRepos) {
-    $.ajax({
-        url: 'http://ani.pe/portfolinator/user/'+username,
-        dataType: 'jsonp',
+   
+    getRepoData(username, extraRepos, setupD3);
+
+    function setupD3(data) {
+        var repos = data.repos;
+        // repos = crossfilter(repos);
+        d3.select("#repos")
+        .append("ul")
+        .selectAll('li')
+        .data(repos)
+        .enter().append('li')
+        .text(function(repo) {
+            return repo.name;
+        });
+    }
+}
+
+function getRepoData(username, extraRepos, callback) {
+   $.ajax({
+        // url: 'http://ani.pe/portfolinator/user/'+username,
+        // dataType: 'jsonp',
         // For testing the frontend, you can request the example static json
         // reponse.  This is how you'd do it if hosting locally on port 8000,
         // as with `python -m SimpleHTTPServer`.
-        //url: 'http://localhost:8000/example.json',
-        //dataType: 'json',
+        url: 'http://localhost:8000/example.json',
+        dataType: 'json',
         
         type: 'GET',
         data: {'extraRepos': extraRepos},
-        success: function(json) {
-            console.log(json);
+        success: function(data) {
+            console.log(data);
+            callback(data);
+            return;
+            /*
             var repos = $('<div>').addClass('portfolinator-repos');
             $.each(json.repos, function(i, repo) {
                 var div = $('<div>').addClass('portfolinator-repo');
@@ -44,7 +65,7 @@ function portfolinatorinize(username, extraRepos) {
                 $('<h1>').text(json.username),
                 repos
             );
+            */
         },
     });
 }
-

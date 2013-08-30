@@ -1,0 +1,6 @@
+[submodule "vendor/d3"]
+	path = vendor/d3
+	url = https://github.com/mbostock/d3.git
+[submodule "vendor/crossfilter"]
+	path = vendor/crossfilter
+	url = https://github.com/square/crossfilter.git
