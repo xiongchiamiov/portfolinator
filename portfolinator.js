@@ -1,7 +1,11 @@
 function portfolinatorinize(username, extraRepos) {
     var columns = [
-        {prop: 'name', header: 'Name'},
-        {prop: 'numForks', header: 'Forks'}
+        {prop: 'name',              header: 'Name'},
+        {prop: 'numForks',          header: 'Forks'},
+        {prop: 'numWatchers',       header: 'Watchers'},
+        {prop: 'numContributors',   header: 'Contributors'},
+        {prop: 'numStargazers',     header: 'Stars'},
+        {prop: 'numContributedCommits',     header: 'My Commits'}
     ];
 
     bindColumnHeaders(columns);

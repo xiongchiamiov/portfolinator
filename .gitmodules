@@ -4,3 +4,6 @@
 [submodule "vendor/crossfilter"]
 	path = vendor/crossfilter
 	url = https://github.com/square/crossfilter.git
+[submodule "vendor/pure"]
+	path = vendor/pure
+	url = https://github.com/yui/pure.git

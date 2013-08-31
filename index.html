@@ -12,12 +12,21 @@
                 });
             });
         </script>
+        <link href="vendor/pure/src/tables/css/tables.css" rel="stylesheet" />
+        <style type='text/css'>
+           body {
+              font-family: Arial, sans-serif;
+           }
+           #portfolinator {
+              margin-top:20px;
+           }
+        </style>
     </head>
     <body>
         <input type="text" id="username">
         <input type="submit" value="portfolinate" id="portfolinate">
         <div id="portfolinator">
-           <table>
+           <table class="pure-table">
               <thead>
                  <tr id="headers">
                  </tr>
