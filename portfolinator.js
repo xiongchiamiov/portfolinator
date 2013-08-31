@@ -33,12 +33,7 @@ function portfolinatorinize(username, extraRepos) {
         headers
         .enter()
         .append('th')
-        .call(function(newTH) {
-            newTH
-            .append('a');
-            newTH
-            .append('span').classed('sortDir', true);
-        });
+        .append('a');
 
         headers.selectAll('a')
         .text(getProp('header'))
