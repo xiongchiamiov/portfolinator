@@ -1,52 +1,90 @@
 function portfolinatorinize(username, extraRepos) {
     var columns = [
-        {prop: 'name',              header: 'Name'},
-        {prop: 'numForks',          header: 'Forks'},
-        {prop: 'numWatchers',       header: 'Watchers'},
-        {prop: 'numContributors',   header: 'Contributors'},
-        {prop: 'numStargazers',     header: 'Stars'},
-        {prop: 'numContributedCommits',     header: 'My Commits'}
+        {prop: 'name',                    header: 'Name'},
+        {prop: 'numForks',                header: 'Forks'},
+        {prop: 'numWatchers',             header: 'Watchers'},
+        {prop: 'numContributors',         header: 'Contributors'},
+        {prop: 'numStargazers',           header: 'Stars'},
+        {prop: 'numContributedCommits',   header: 'My Commits'}
     ];
+    var allRepos;
 
-    bindColumnHeaders(columns);
-    getRepoData(username, extraRepos, bindRepoData);
+    var columnHeaders = bindColumnHeaders(columns);
+    getRepoData(username, extraRepos, setupD3);
+
+    function setupD3(repos) {
+        var rows = bindRepoData(repos);
+
+        columnHeaders.on('click', function(d) {
+            rows.sort(comparator(d.prop, d.asc));
+            d.asc = !d.asc;
+            d3.event.preventDefault();
+            columnHeaders.classed('selected', false);
+            this.classList.add('selected');
+        });
+    }
 
     function bindColumnHeaders(columns) {
-        var columnHeaders =
+        var headers =
         d3.select("#headers")
         .selectAll('th')
         .data(columns);
 
-        columnHeaders
+        headers
         .enter()
-        .append('th');
+        .append('th')
+        .call(function(newTH) {
+            newTH
+            .append('a');
+            newTH
+            .append('span').classed('sortDir', true);
+        });
 
-        columnHeaders
-        .text(getProp('header'));
+        headers.selectAll('a')
+        .text(getProp('header'))
+        .attr('href', '#');
 
-        columnHeaders
+        headers
         .exit()
         .remove();
+
+        return headers;
     }
 
     function bindRepoData(data) {
         var repos = data.repos;
 
-        var repoRow = d3.select("#repos")
+        var repoRows = d3.select("#repos")
         .selectAll("tr")
-        .data(repos)
+        .data(repos);
+
+        var repoRow = repoRows
         .enter()
         .append('tr');
+
+        repoRows.exit().remove();
 
         $.each(columns, function(i, column) {
             repoRow.append('td').text(getProp(column.prop))
         });
+
+        return repoRows;
     }
 
     function getProp(property) {
         return function (obj) {
             return obj[property];
         };
+    }
+
+    function comparator(prop, asc) {
+        var less     = asc ? -1 : 1;
+        var greater  = asc ? 1 : -1;
+        asc = asc ? 1 : -1;
+        return function(a, b) {
+            if (a[prop] == b[prop]) return 0;
+            return a[prop] < b[prop] ? less : greater;
+        }
     }
 }
 

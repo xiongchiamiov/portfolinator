@@ -4,7 +4,7 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="vendor/crossfilter/crossfilter.min.js"></script>
         <script src="vendor/d3/d3.min.js"></script>
-        <script src="portfolinator.js"></script>
+        <script src="portfolinator.js" type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript">
             $(document).ready(function() {
                 $('#portfolinate').click(function() {
@@ -19,6 +19,18 @@
            }
            #portfolinator {
               margin-top:20px;
+           }
+
+           .sortable {
+              cursor: pointer;
+              text-decoration: underline;
+           }
+
+           .selected {
+              background-color:#eee;
+           }
+           a {
+              color: #1111BB !important;
            }
         </style>
     </head>
