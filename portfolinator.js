@@ -1,18 +1,48 @@
 function portfolinatorinize(username, extraRepos) {
-   
-    getRepoData(username, extraRepos, setupD3);
+    var columns = [
+        {prop: 'name', header: 'Name'},
+        {prop: 'numForks', header: 'Forks'}
+    ];
 
-    function setupD3(data) {
+    bindColumnHeaders(columns);
+    getRepoData(username, extraRepos, bindRepoData);
+
+    function bindColumnHeaders(columns) {
+        var columnHeaders =
+        d3.select("#headers")
+        .selectAll('th')
+        .data(columns);
+
+        columnHeaders
+        .enter()
+        .append('th');
+
+        columnHeaders
+        .text(getProp('header'));
+
+        columnHeaders
+        .exit()
+        .remove();
+    }
+
+    function bindRepoData(data) {
         var repos = data.repos;
-        // repos = crossfilter(repos);
-        d3.select("#repos")
-        .append("ul")
-        .selectAll('li')
+
+        var repoRow = d3.select("#repos")
+        .selectAll("tr")
         .data(repos)
-        .enter().append('li')
-        .text(function(repo) {
-            return repo.name;
+        .enter()
+        .append('tr');
+
+        $.each(columns, function(i, column) {
+            repoRow.append('td').text(getProp(column.prop))
         });
+    }
+
+    function getProp(property) {
+        return function (obj) {
+            return obj[property];
+        };
     }
 }
 
