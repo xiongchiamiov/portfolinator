@@ -1,6 +1,7 @@
 function portfolinatorinize(username, extraRepos) {
     var columns = [
-        {prop: 'name',                    header: 'Name'},
+        {prop: 'name',                    header: 'Repo',
+         content: createNameColumn},
         {prop: 'numForks',                header: 'Forks'},
         {prop: 'numWatchers',             header: 'Watchers'},
         {prop: 'numContributors',         header: 'Contributors'},
@@ -46,6 +47,17 @@ function portfolinatorinize(username, extraRepos) {
         return headers;
     }
 
+    function createNameColumn(td) {
+        td.append('a')
+        .text(getProp('name'))
+        .attr('href', getProp('url'))
+        .classed('name', true);
+
+        td.append('div')
+        .text(getProp('description'))
+        .classed('description', true);
+    }
+
     function bindRepoData(data) {
         var repos = data.repos;
 
@@ -60,7 +72,15 @@ function portfolinatorinize(username, extraRepos) {
         repoRows.exit().remove();
 
         $.each(columns, function(i, column) {
-            repoRow.append('td').text(getProp(column.prop))
+            var td = repoRow.append('td');
+            // Give each column a class named {column.prop}
+            td.classed(column.prop, true);
+            // If the column has a custom content function, use that
+            if (column.content) {
+                column.content(td);
+            } else {
+                td.text(getProp(column.prop))
+            }
         });
 
         return repoRows;

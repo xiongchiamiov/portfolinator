@@ -32,13 +32,25 @@
            a {
               color: #1111BB !important;
            }
+           #headers > th {
+              cursor: pointer;
+           }
+
+           .description {
+              font-size:80%;
+              color:#666;
+           }
+
+           td.name {
+              max-width:250px;
+           }
         </style>
     </head>
     <body>
         <input type="text" id="username">
         <input type="submit" value="portfolinate" id="portfolinate">
         <div id="portfolinator">
-           <table class="pure-table">
+           <table class="pure-table pure-table-horizontal">
               <thead>
                  <tr id="headers">
                  </tr>
