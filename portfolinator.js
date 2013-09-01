@@ -1,12 +1,13 @@
 function portfolinatorinize(username, extraRepos) {
     var columns = [
         {prop: 'name',                    header: 'Repo',
-         content: createNameColumn},
+         content: columnName},
         {prop: 'numForks',                header: 'Forks'},
         {prop: 'numWatchers',             header: 'Watchers'},
         {prop: 'numContributors',         header: 'Contributors'},
         {prop: 'numStargazers',           header: 'Stars'},
-        {prop: 'numContributedCommits',   header: 'My Commits'}
+        {prop: 'numContributedCommits',   header: 'My Contributions',
+         content: columnContributions}
     ];
     var allRepos;
 
@@ -47,7 +48,7 @@ function portfolinatorinize(username, extraRepos) {
         return headers;
     }
 
-    function createNameColumn(td) {
+    function columnName(td) {
         td.append('a')
         .text(getProp('name'))
         .attr('href', getProp('url'))
@@ -58,8 +59,20 @@ function portfolinatorinize(username, extraRepos) {
         .classed('description', true);
     }
 
+    function columnContributions(td) {
+        td.append('a')
+        .filter(getProp('numContributedCommits'))
+        .text(function(d) {
+            return d.numContributedCommits + " commits";
+        })
+        .attr('href', function(d) {
+            return d.url + '/commits?author=' + encodeURIComponent(username);
+        });
+    }
+
     function bindRepoData(data) {
         var repos = data.repos;
+        username = data.username;
 
         var repoRows = d3.select("#repos")
         .selectAll("tr")
