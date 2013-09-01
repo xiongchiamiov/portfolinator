@@ -51,11 +51,10 @@ function portfolinatorinize(username, extraRepos) {
     }
 
     function columnDate(td) {
-        var inputFormat = d3.time.format('%a, %d %b %Y %H:%M:%S GMT'); 
         var outputFormat = d3.time.format('%Y-%m-%d'); 
         td.text(function(d, i) {
-            var t = inputFormat.parse(d.lastPushed);
-            return t && outputFormat(t) || null;
+            var t = d.lastPushed;
+            return (t && outputFormat(t));
         });
     }
 
@@ -87,7 +86,7 @@ function portfolinatorinize(username, extraRepos) {
 
         var repoRows = d3.select("#repos")
         .selectAll("tr")
-        .data(repos);
+        .data(massageData(repos));
 
         var repoRow = repoRows
         .enter()
@@ -125,6 +124,15 @@ function portfolinatorinize(username, extraRepos) {
             if (a[prop] == b[prop]) return 0;
             return (a[prop] || def) < (b[prop] || def) ? less : greater;
         }
+    }
+
+    // Parse some of the incomping data inot more useful representations
+    function massageData(repos) {
+        var inputFormat = d3.time.format('%a, %d %b %Y %H:%M:%S GMT'); 
+        $.each(repos, function(i, repo) {
+            repo.lastPushed = inputFormat.parse(repo.lastPushed);
+        });
+        return repos;
     }
 }
 
