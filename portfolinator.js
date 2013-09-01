@@ -3,6 +3,8 @@ function portfolinatorinize(username, extraRepos) {
         {prop: 'name',                    header: 'Repo',
          content: columnName},
         {prop: 'numForks',                header: 'Forks'},
+        {prop: 'lastPushed',              header: 'Updated',
+         content: columnDate},
         {prop: 'numWatchers',             header: 'Watchers'},
         {prop: 'numContributors',         header: 'Contributors'},
         {prop: 'numStargazers',           header: 'Stars'},
@@ -46,6 +48,15 @@ function portfolinatorinize(username, extraRepos) {
         .remove();
 
         return headers;
+    }
+
+    function columnDate(td) {
+        var inputFormat = d3.time.format('%a, %d %b %Y %H:%M:%S GMT'); 
+        var outputFormat = d3.time.format('%Y-%m-%d'); 
+        td.text(function(d, i) {
+            var t = inputFormat.parse(d.lastPushed);
+            return t && outputFormat(t) || null;
+        });
     }
 
     function columnName(td) {
@@ -108,10 +119,11 @@ function portfolinatorinize(username, extraRepos) {
     function comparator(prop, asc) {
         var less     = asc ? -1 : 1;
         var greater  = asc ? 1 : -1;
+        var def  = 0;
         asc = asc ? 1 : -1;
         return function(a, b) {
             if (a[prop] == b[prop]) return 0;
-            return a[prop] < b[prop] ? less : greater;
+            return (a[prop] || def) < (b[prop] || def) ? less : greater;
         }
     }
 }
