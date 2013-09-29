@@ -1,3 +1,8 @@
 token = ''
 debug = True # Always set this to False in production!
 
+# You probably want to use Memcached or Redis or something:
+# http://werkzeug.pocoo.org/docs/contrib/cache/#cache-systems
+from werkzeug.contrib.cache import SimpleCache
+cache = SimpleCache(default_timeout=300) # Max age for cache entries in seconds.
+

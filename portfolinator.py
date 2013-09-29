@@ -20,7 +20,19 @@ gh = login(token=settings.token)
 
 @app.route('/user/<username>')
 def user(username):
+    app.logger.debug('Processing request for user %s' % username)
     def extract_repo(repo):
+        # We need to include both the researched user and the owner of the
+        # repository because a user may have access to someone else's repo, and
+        # some of the results here will be different depending on the user
+        # we're analyzing.
+        cacheKey = '%s::%s:%s' % (username, repo.owner, repo.name)
+        app.logger.debug('Processing request for repo %s' % cacheKey)
+        r = settings.cache.get(cacheKey)
+        if r:
+            app.logger.debug('Cache hit!')
+            return r
+        
         r = {}
         r['name'] = repo.full_name
         r['description'] = repo.description
@@ -47,6 +59,8 @@ def user(username):
             if username.lower() == contribution.author.login.lower():
                 r['numContributedCommits'] = contribution.total
                 break
+        
+        settings.cache.set(cacheKey, r)
         return r
 
     repos = []
